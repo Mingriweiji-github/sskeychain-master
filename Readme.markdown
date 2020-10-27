@@ -50,6 +50,9 @@ Read the [online documentation](http://cocoadocs.org/docsets/SSKeychain).
 If your saving to the keychain fails, use the NSError object to handle it. You can invoke `[error code]` to get the numeric error code. A few values are defined in SSKeychain.h, and the rest in SecBase.h.
 
 ```objective-c
+
+#import "SSKeychain.h"
+
 #define keychain_service @"xxxKeyChain_Service"
 #define keychain_account @"xxxKeyChain_Account"
 
