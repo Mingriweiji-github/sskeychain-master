@@ -50,16 +50,31 @@ Read the [online documentation](http://cocoadocs.org/docsets/SSKeychain).
 If your saving to the keychain fails, use the NSError object to handle it. You can invoke `[error code]` to get the numeric error code. A few values are defined in SSKeychain.h, and the rest in SecBase.h.
 
 ```objective-c
-NSError *error = nil;
-SSKeychainQuery *query = [[SSKeychainQuery alloc] init];
-query.service = @"MyService";
-query.account = @"soffes";
-[query fetch:&error];
+#define keychain_service @"xxxKeyChain_Service"
+#define keychain_account @"xxxKeyChain_Account"
 
-if ([error code] == errSecItemNotFound) {
-    NSLog(@"Password not found");
-} else if (error != nil) {
-	NSLog(@"Some other error occurred: %@", [error localizedDescription]);
+// - MARK:获取唯一标示符uuid
++ (NSString *)uuid{
+    NSString *udid = [SSKeychain passwordForService:keychain_service account:keychain_account];
+    NSError *error=nil;
+    
+    if (udid == nil || [udid isEqualToString:@""] || udid.length == 0)
+    {
+        udid = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        BOOL succcess= [SSKeychain setPassword:udid
+                                    forService:keychain_service
+                                       account:keychain_account
+                                         error:&error];
+        if (succcess)
+        {
+            NSLog(@"获取的UUID is %@", udid);
+        }
+        
+        return udid;
+    }
+    else {
+        return udid;
+    }
 }
 ```
 
